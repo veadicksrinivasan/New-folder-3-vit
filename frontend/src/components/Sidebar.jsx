@@ -14,6 +14,7 @@ import {
   Activity,
   User,
   Settings,
+  ShieldCheck,
   LogOut,
   ChevronLeft,
   ChevronRight
@@ -33,7 +34,8 @@ export const Sidebar = () => {
     { label: 'Reports', path: '/reports', icon: BarChart3 },
     { label: 'Developer Portal', path: '/developer', icon: Code2 },
     { label: 'Company Data', path: '/company-data', icon: Database },
-    { label: 'Activity Feed', path: '/activity', icon: Activity }
+    { label: 'Activity Feed', path: '/activity', icon: Activity },
+    { label: 'Admin Console', path: '/admin', icon: ShieldCheck }
   ];
 
   const bottomItems = [

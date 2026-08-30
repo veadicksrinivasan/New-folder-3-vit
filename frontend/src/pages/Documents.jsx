@@ -114,14 +114,28 @@ export const Documents = () => {
                   <td>
                     <div style={{ display: 'flex', gap: '0.5rem' }}>
                       <button
-                        onClick={() => showToast(`Opening preview for ${doc.name}`, 'info')}
+                        onClick={async () => {
+                          try {
+                            await fetchAPI(`/documents/${doc.id}`);
+                            showToast(`Opened preview for ${doc.name}`, 'info');
+                          } catch (err) {
+                            showToast(err.message, 'error');
+                          }
+                        }}
                         className="btn btn-secondary btn-sm"
                       >
                         <Eye size={14} />
                         <span>View</span>
                       </button>
                       <button
-                        onClick={() => showToast(`Downloading ${doc.name}`, 'success')}
+                        onClick={async () => {
+                          try {
+                            await fetchAPI(`/documents/${doc.id}/download`);
+                            showToast(`Downloading ${doc.name}`, 'success');
+                          } catch (err) {
+                            showToast(err.message, 'error');
+                          }
+                        }}
                         className="btn btn-secondary btn-sm"
                       >
                         <Download size={14} />

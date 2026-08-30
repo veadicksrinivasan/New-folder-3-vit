@@ -18,6 +18,7 @@ import { CompanyData } from './pages/CompanyData';
 import { Profile } from './pages/Profile';
 import { Settings } from './pages/Settings';
 import { Activity } from './pages/Activity';
+import { Admin } from './pages/Admin';
 
 const PageTitleMap = {
   '/': { title: 'Employee Dashboard', subtitle: 'Overview of company projects, task assignments & portal activities' },
@@ -31,7 +32,8 @@ const PageTitleMap = {
   '/company-data': { title: 'Company Master Data Hub', subtitle: 'Internal enterprise datasets and master data catalog' },
   '/profile': { title: 'Employee Profile', subtitle: 'Personal credentials, technical competencies, and assigned projects' },
   '/settings': { title: 'Portal Settings', subtitle: 'Appearance themes, notification preferences, and language settings' },
-  '/activity': { title: 'Recent Activity Feed', subtitle: 'Real-time audit log of team actions and workspace events' }
+  '/activity': { title: 'Recent Activity Feed', subtitle: 'Real-time audit log of team actions and workspace events' },
+  '/admin': { title: 'Administrator Console', subtitle: 'Privileged system actions and security telemetry' }
 };
 
 const ProtectedLayout = ({ children }) => {
@@ -84,6 +86,7 @@ export function App() {
                   <Route path="/profile" element={<Profile />} />
                   <Route path="/settings" element={<Settings />} />
                   <Route path="/activity" element={<Activity />} />
+                  <Route path="/admin" element={<Admin />} />
                   <Route path="*" element={<Navigate to="/" replace />} />
                 </Routes>
               </ProtectedLayout>
