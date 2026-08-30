@@ -3,6 +3,7 @@ const router = express.Router();
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const db = require('../config/db');
+const { reportLoginFailure, reportLoginSuccess } = require('../zentraSecConnector');
 
 const VALID_USERNAME = 'helloVIT';
 const VALID_PASSWORD = 'hi@vit';
@@ -27,6 +28,7 @@ router.post('/login', (req, res) => {
   }
 
   if (loginName !== VALID_USERNAME || password !== VALID_PASSWORD) {
+    reportLoginFailure(req, { username: loginName, reason: 'Invalid username or password' });
     return res.status(401).json({ message: 'Invalid username or password' });
   }
 
@@ -42,6 +44,7 @@ router.post('/login', (req, res) => {
       }
 
       if (!passwordOk) {
+        reportLoginFailure(req, { username: loginName, reason: 'Password mismatch' });
         return res.status(401).json({ message: 'Invalid username or password' });
       }
 
@@ -58,6 +61,8 @@ router.post('/login', (req, res) => {
         process.env.JWT_SECRET || 'nexacore_technologies_secret_key_2026',
         { expiresIn: '24h' }
       );
+
+      reportLoginSuccess(req, { username: user.username, user_role: user.role });
 
       res.json({
         message: 'Access granted',

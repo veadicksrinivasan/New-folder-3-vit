@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const db = require('../config/db');
 const { sendSecurityEvent } = require('../services/securityEventService');
+const { reportPrivilegeAccess } = require('../zentraSecConnector');
 const { verifyToken, requireAdmin, getClientIp } = require('../middleware/authMiddleware');
 
 router.use(verifyToken);
@@ -9,6 +10,12 @@ router.use(requireAdmin);
 
 // GET /api/admin/dashboard-stats
 router.get('/dashboard-stats', (req, res) => {
+  reportPrivilegeAccess(req, {
+    username: req.user.username,
+    user_role: req.user.role,
+    resource: '/api/admin/dashboard-stats',
+    metadata: { action: 'VIEW_ADMIN_DASHBOARD' }
+  });
   db.get("SELECT COUNT(*) as total_workers FROM workers", [], (err1, row1) => {
     db.get("SELECT COUNT(*) as total_managers FROM managers", [], (err2, row2) => {
       db.get("SELECT COUNT(*) as present_today FROM attendance WHERE status = 'Present'", [], (err3, row3) => {
@@ -35,6 +42,16 @@ router.post('/system-action', (req, res) => {
     user_role: req.user.role,
     ip_address: getClientIp(req),
     resource: '/admin/system-action',
+    metadata: {
+      action: action_name || 'SYSTEM_MAINTENANCE_EXECUTE',
+      details: details || 'Administrative privilege action performed'
+    }
+  });
+
+  reportPrivilegeAccess(req, {
+    username: req.user.username,
+    user_role: req.user.role,
+    resource: '/api/admin/system-action',
     metadata: {
       action: action_name || 'SYSTEM_MAINTENANCE_EXECUTE',
       details: details || 'Administrative privilege action performed'

@@ -56,12 +56,6 @@ export const AuthProvider = ({ children }) => {
     const loginName = String(username || '').trim();
     const role = selectedRole === 'admin' ? 'admin' : 'developer';
 
-    if (loginName !== VALID_USERNAME || password !== VALID_PASSWORD) {
-      const error = new Error('Invalid username or password');
-      showToast(error.message, 'error');
-      throw error;
-    }
-
     try {
       const data = await fetchAPI('/auth/login', {
         method: 'POST',
